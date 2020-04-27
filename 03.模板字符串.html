@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    const Person = {
+      name:"亚亚",
+      age:22,
+      hometown:"河南",
+      hobby:"狼人杀"
+    }
+    const intro = "大家好，我是" + Person.name + ",我来自" + Person.hometown
+    + ",我今年" + Person.age +"岁了,我的爱好是" + Person.hobby + "。" 
+    console.log(intro)
+
+    const intro2 = `大家好，我是${Person.name}，我来自${Person.hometown},我今年${Person.age}岁了，我的爱好是${Person.hobby},我明年就${Person.age + 1}岁了，我已经是${Person.age > 18 ? '成年人' : '未成年'}了。`
+    console.log(intro2)
+
+  </script>
+</body>
+</html>

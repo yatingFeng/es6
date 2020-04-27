@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    // var a = 1
+    // console.log(a)
+    // var b = "hello"
+    // console.log(b)
+
+    // let c = 10
+    // c = c + 1
+    // console.log(c)
+
+    // const d = "hello"
+    // d = d + "world"
+    // console.log(d)
+    // var productPrice = 5.99
+    // // line 1000
+    // var productPrice = 9.99
+    // // line 5000
+    // productPrice++
+    // console.log(productPrice)
+
+    // var price = 1
+    // function setPrice(){
+    //   price++
+    // }
+    // setPrice()
+    // console.log(price)  //2
+ 
+    // function setPrice(){
+    //   var price = 1
+    //   price++
+    // }
+    // setPrice()
+    // console.log(price)  //Uncaught ReferenceError: price is not defined
+    // var price = 1;
+    // function setPrice(){
+    //   var price = 10
+    //   console.log(price)  //打印的是局部变量
+    //   console.log(window.price)  //打印的是全局变量
+    // }
+    // setPrice()
+    // console.log(price)   //打印的是全局变量
+    // for(var i = 0; i < 5; i++){}
+    // console.log(i)  //5
+    // for(let i = 0; i < 5; i++){}
+    // console.log(i)  //Uncaught ReferenceError: i is not defined
+    let point = 95
+    if(point >= 60){
+      var pass = true
+    }
+    console.log(pass)
+  </script>
+</body>
+</html>

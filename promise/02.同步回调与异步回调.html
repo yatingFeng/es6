@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    //1.同步回调函数
+    const arr = [1, 2, 5, 3]
+    // 遍历时的箭头函数，我没有调用
+    arr.forEach(item => { //遍历回调，同步回调函数不会放入队列，一上来就会执行完
+      console.log(item)
+    })
+    console.log('forEach之后')
+    // 运行结果：1 2 3 5 forEach之后
+
+    // 2.异步回调函数
+    setTimeout(() => {  //异步回调函数会放入队列中将来执行
+      console.log('timeout callback()')
+    },0)
+    console.log('setTimeout之后')
+    // 运行结果：setTimeout之后   timeout callback()
+    // 尽管定时器设置为了0
+  </script>
+</body>
+</html>

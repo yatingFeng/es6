@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    function orderCombo(comboName = "巨无霸套餐", drink = "可口可乐") {
+      console.log(`您点了${comboName},饮料是：${drink}。`)
+    }
+    orderCombo("巨无霸套餐") //您点了巨无霸套餐,饮料是：可口可乐。
+    orderCombo("巨无霸套餐","橙汁") //您点了巨无霸套餐,饮料是：橙汁。
+    // 如果我只想传第二个值不传第一个：人为设置undefined
+    orderCombo(undefined,"雪碧")  //您点了巨无霸套餐,饮料是：雪碧。
+
+    const string = "abc"
+    const substring = "ab"
+    // 判断一个字符串中是否包含另一个字符串:inculdes
+    console.log(string.includes(substring)) //true
+    console.log(string.includes("d")) //false
+
+    // 判断一个字符串是否以一个字符开头：startWith
+    console.log(string.startsWith(substring)) //true
+    console.log(string.startsWith("b")) //false
+    // 判断一个字符串是否在第几位以某个字符开头的
+    console.log(string.startsWith("b", 1)) //true
+
+    // 判断一个字符串是否以某字符结尾
+    console.log(string.endsWith("c")) //true
+    // endWith第二个参数是对原字符串截取之后再判断(从1开始数)
+    const string1 = "abfuhrewrefoakms"
+    console.log(string1.endsWith("wre",10))   //true
+
+
+    const foods = ["香辣鸡腿堡","墨西哥鸡肉卷","麻辣烤翅"]
+    for(const [index,food] of foods.entries()){
+      console.log(`第${index}号套餐是${food}`)
+    }
+    // 第0号套餐是香辣鸡腿堡
+    // 第1号套餐是墨西哥鸡肉卷
+    // 第2号套餐是麻辣烤翅
+  </script>
+
+</body>
+
+</html>

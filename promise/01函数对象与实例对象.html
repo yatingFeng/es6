@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    /*
+      函数对象与实例对象
+      函数对象：将函数作为对象使用时，简称为函数对象
+      实例对象：new函数产生的对象，简称为对象
+    */
+    function Fn(){  //Fn是个函数
+    }
+    // 此时Fn是个构造函数（看是否是构造函数不是看首字母大写，而是看如何使用）
+    //调用/执行函数时左边有“new”就是构造函数 new执行这个函数返回的为实例对象
+    const fn = new Fn() //此时Fn是构造函数，fn是实例对象（简称对象）
+    // 括号（）左边是函数，.左边是对象
+    //此时Fn是对象，但它本身是函数，Fn称之函数对象（函数当对象使用的时候）
+    console.log(Fn.prototype) 
+    Fn.bind({})   //Fn是函数对象
+    // $是jquery的object对象
+    $("#test")  //，因为在括号左边，所以是jquery函数
+    // jquery中发送ajax请求的，
+    $.get('/test')  //jquery对象
+  </script>
+</body>
+</html>

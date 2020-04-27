@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    // const team = ["班主任","班长","同学1","同学2","同学3"]
+    // // const [boss,monitor,students] = team
+    // // console.log(boss,monitor,students)  //班主任 班长 同学1
+    // const [boss,monitor,...students] = team
+    // console.log(boss,monitor,students)  //班主任 班长 (3) ["同学1", "同学2", "同学3"]
+    // // ...nums不管你传入了多少个参数，都放到nums数组中
+    // function sortNums(...nums){
+    //   if(nums.length === 0) {
+    //     return []
+    //   }else{
+    //     //js的sort是有问题的，需要改造一下 正序排列a-b,倒序排列b-a
+    //     return nums.sort((a,b) =>  a - b )
+    //   }
+    // }
+    // console.log(sortNums(1,2,10))   //(3) [1, 2, 10]
+
+    const boss = "班主任"
+    const monitor = "班长"
+    const students = ["同学1","同学2","同学3"]
+    const team = [boss,monitor,...students]
+    console.log(team)    //["班主任", "班长", "同学1", "同学2", "同学3"]
+
+    const food = ["香辣鸡腿堡","墨西哥鸡肉卷","香辣烤翅"]
+    const drink = ["百事可乐","橙汁"]
+    // concat方法
+    // const kfc = food.concat(drink)
+    // console.log(kfc)  //(5) ["香辣鸡腿堡", "墨西哥鸡肉卷", "香辣烤翅", "百事可乐", "橙汁"]
+    const kfc = [...food,...drink]
+    console.log(kfc)  //(5) ["香辣鸡腿堡", "墨西哥鸡肉卷", "香辣烤翅", "百事可乐", "橙汁"]
+    const kfc = [...food,"圣代","吗媞娜",...drink]
+    console.log(kfc)  //(5) ["香辣鸡腿堡", "墨西哥鸡肉卷", "香辣烤翅", "百事可乐", "橙汁"]
+  </script>
+</body>
+</html>

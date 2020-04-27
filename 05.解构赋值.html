@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    // const person = {
+    //   name: "yaya",
+    //   age: 18,
+    //   city:"郑州"
+    // }
+    // // 当从对象中解构时用{}。从数组中解构时用[]
+    // // {属性名1,属性名2...} = 从哪里结构
+    // const {name, age, city}  = person
+    // console.log(name, age, city)    //yaya 18 郑州
+
+    // 对象嵌套
+    // const person2 = {
+    //   // name: "yaya",
+    //   age: 18,
+    //   city:"郑州",
+    //   social:{
+    //     weibo:"yatingFeng",
+    //     bokeyuan:"yaya003"
+    //   }
+    // }
+    // // const {weibo,bokeyuan} = person2.social
+    // // console.log(weibo,bokeyuan)   //yatingFeng yaya003
+    // const {name:myName="牙牙",social:{bokeyuan:boke}} = person2
+    // console.log(myName,boke)  //牙牙 yaya003
+
+    // const info = "亚婷,18,0366"
+    // const infoArr = info.split(',')   //["亚婷", "18", "0366"]
+    // const [name, age, id] = infoArr
+    // console.log(name, age, id)    //亚婷 18 0366
+
+      let a = 1;
+      let b = -1;
+      [a, b] = [b, a];
+      console.log(a,b)  //-1 1
+  </script>
+</body>
+</html>

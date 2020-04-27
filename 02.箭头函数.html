@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    #wrap{
+      width: 100%;
+    }
+    #the-button{
+      display: block;
+      margin: 50% auto;
+    }
+    .bigger{
+      padding: 20px;
+      transition: padding 2s;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="wrap">
+    <button id="the-button">click me</button>
+  </div>
+  <script>
+    document.getElementById("the-button").addEventListener("click",function(){
+      this.classList.add("bigger")
+      // 使用定时器来控制按钮变大以后再更改文字
+      setTimeout(() => {
+        this.innerHTML = "clicked"
+      },2000)
+    })
+    const doubleValue = value => {
+      return value * 2
+    }
+    console.log(doubleValue(3)) //6
+    const greeting = () => {
+      console.log("hello")
+    }
+    greeting()  //hello
+    const printName = (name) =>  "你好" + name
+    console.log(printName("张三")) //你好张三
+    const add = (a, b) => {
+      return a + b
+    }
+    console.log(add(0.1,0.2)) //0.30000000000000004
+    const companies = ["google","huawei","samsung"]
+    const result  = companies.map( company => company + "is a company")
+    console.log(result)
+    //  ["googleis a company", "huaweiis a company", "samsungis a company"]
+    const ages = [14,19,21]
+    const result2 = ages.filter(age => age > 18)
+    console.log(result2)    //[19, 21]
+  </script>
+</body>
+
+</html>

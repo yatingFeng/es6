@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+  /*
+    1.错误的类型
+      Error:所有错误的父类型
+      ReferenceError:引用的变量不存在
+      TypeError:数据类型不正确的错误
+      RangeError:数据值不在其允许的范围内
+      SyntaxError:语法错误
+    2.错误处理
+      捕获错误：try...catch
+      抛出错误：throw error
+    3.错误属性
+      message属性：错误相关信息
+      stack属性：函数调用栈记录
+  */
+  // ReferenceError:引用的变量不存在
+  // console.log(a)  //Uncaught ReferenceError: a is not defined
+  // console.log('---')  //没有捕获error,下面的代码不会执行
+
+  //   TypeError:数据类型不正确的错误
+  // let b = null
+  // console.log(b.name) //Uncaught TypeError: Cannot read property 'name' of null
+
+  // RangeError:数据值不在其允许的范围内
+  // function fn(){
+  //   fn()  //自己调用自己，递归陷入死循环
+  // }
+  // fn()  //Uncaught RangeError: Maximum call stack size exceeded
+
+  // SyntaxError:语法错误
+  // const c = """"  //Uncaught SyntaxError: Unexpected string
+
+  // // try{会出错的代码}catch(error){处理错误}
+  // try{
+  //   let f
+  //   console.log(f.sex)
+  // }catch (error) {
+  //   console.log(error.message)
+  //   console.log(error.stack)
+  // }
+  // // 就算上面有错误，也不耽误下面的执行，因为我们已经将错误捕获了
+  // console.log('出错之后')
+
+  // throw Error抛出异常
+    function something(){
+      if(Date.now() % 2 === 1 ){
+        console.log('当前时间为奇数，可以执行任务')
+      }else{  //如果时间是偶数抛出异常，由调用者来处理
+        throw new Error('当前时间为偶数，无法执行任务')
+      }
+    }
+    // 处理捕获异常
+    try {
+      something()
+    }catch (error){
+      alert(error.message)
+    }
+  </script>
+</body>
+</html>
