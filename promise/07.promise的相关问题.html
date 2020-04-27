@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /*
+      1.如何改变promise的相关状态
+        (1)resolve(value):如果当前是pending就会变为resolved
+        (2)reject(reason):如果当前是pending就会变为rejected
+        (3)抛出异常:如果当前是pending就会变为rejected
+      2.一个promise指定多个成功/失败回调函数,都会调用吗?
+        当promise改变为对应状态时都会调用
+    */
+    const p = new Promise((resolve, reject) => {
+      resolve(1)  //promise变为resolved成功状态
+      reject(1)  //promise变为rejected成功状态
+      throw new Error('出错了')   //抛出异常,promise变为rejected失败状态,reason为抛出的error
+      throw 3   //抛出异常,promise变为rejected失败状态,reason为抛出的3
+    })
+    p.then(
+      value => { },
+      reason => { console.log('reason:', reason) }
+    )
+    // 可以打印输出看一下,p的两个失败的回调都调用了
+    p.then(
+      value => { },
+      reason => { console.log('reason2:', reason) }
+    )
+
+    /*
+    3.改变promise状态和指定回调函数谁先谁后?
+      (1)都有可能,正常情况下是先指定回调函数再改变状态,但也可以先改变状态再指定回调
+      (2)如何先改变状态再指定回调?
+        在执行器中直接调用resolve()/reject()
+        延迟更长时间才调用then
+      (3)什么时候才能得到数据?
+      如果先指定的回调,那么当状态发生改变时,回调函数就会调用,得到数据
+      如果先改变的状态,那当指定回调时,回调函数就会调用,得到数据
+    */
+    // 常规:先指定回调函数,再改状态
+    new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(1)   //后改状态,同时指定数据,异步执行回调函数
+      }, 1000)
+    }).then(  //先指定回调函数,保存当前指定的回调函数
+      value => { },
+      reason => { console.log('reason:', reason) }
+    )
+    // 先该状态,后指定回调函数
+    new Promise((resolve, reject) => {
+      resolve(1)   //后改状态,同时指定数据
+    }).then(  //后指定回调函数,异步执行回调函数
+      value => { console.log('value2:', value) },
+      reason => { console.log('reason2:', reason) }
+    )
+
+    const p2 = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(1)   //后改状态,同时指定数据,异步执行回调函数
+      }, 1000)
+    })
+    setTimeout(() => {  //将then延迟
+      p2.then(  //先指定回调函数,保存当前指定的回调函数
+        value => { console.log('value3:', value) },
+        reason => { console.log('reason3:', reason) }
+      )
+    }, 2000)
+
+
+    /*
+      划重点!!!!!!!!!!!!!!!!面试高频
+      4.promise.then()返回新的promise状态由什么决定?
+      简单表达:由then()指定的回调函数执行的结果决定
+      详细表达:
+        如果抛出异常,新promise变为rejected,reason为抛出的异常
+        如果返回的是非promise的任意值,新promise变为resolved,value为返回的值
+        如果返回的是另一个新promise,此promise的结果就会成为新promise的结果
+    */
+    new Promise((resolve, reject) => {
+      resolve(1)
+    }).then(
+      value => {
+        console.log('onResolved1()', value)
+        // return 2
+        // return Promise.resolve(3)
+        // return Promise.rejected(4)
+        throw 5
+      },   
+      reason => { console.log('onRejected1()', reason) }
+    ).then(
+      value => { console.log('onResolved2():', value) },  //onResolved,undefined
+      reason => { console.log('onRejected2()', reason) }
+    )
+  </script>
+</body>
+
+</html>
