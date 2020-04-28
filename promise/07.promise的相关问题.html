@@ -92,12 +92,77 @@
         // return Promise.resolve(3)
         // return Promise.rejected(4)
         throw 5
-      },   
+      },
       reason => { console.log('onRejected1()', reason) }
     ).then(
       value => { console.log('onResolved2():', value) },  //onResolved,undefined
       reason => { console.log('onRejected2()', reason) }
     )
+
+    /*
+      5.promise如何串联多个操作任务？
+       （1）promise的then()返回一个新的promise，可以开成then()的链式调用
+       （2）通过then的链式调用串联多个同步/异步任务
+    */
+    new Promise((resolve, reject) => {
+      setTimeout(() => {
+        console.log('执行任务1（异步）')
+        resolve(1)
+      }, 1000)
+    }).then(
+      value => {
+        console.log('任务1的结果', value)
+        console.log('执行任务2（同步）')
+        return 2
+      },
+    ).then(
+      value => {
+        console.log('任务2的结果', value)
+        return new Promise((resolve,reject) => {
+          // 启动任务3（异步）
+          setTimeout(() => {
+            console.log('执行任务3')
+            resolve(3)
+          }, 1000)
+        })
+      },
+    ).then(
+      value => {
+        console.log('任务3的结果',value)
+      }
+    )
+
+    /*
+      6.promise异常传透
+        （1）当使用promise的then链式调用时，可以在最后指定失败的回调
+        （2）前面任何操作出了异常，都会传到最后失败的回调中处理
+      7.中断promise链
+        （1）当使用promise的then链式调用时，在中间中断，不再调用后面的回调函数
+        （2）办法：在回调函数中返回一个pending状态的promise对象
+    */
+    new Promise((resolve, reject) => {
+        // resolve(1)
+        reject(1)
+    }).then(
+      value => {
+        console.log('onResolved1()', value)
+        return 2
+      },
+      reason => {throw reason}
+    ).then(
+      value => {
+        console.log('onResolved2()', value)
+        return 3
+      },
+      reason => {throw reason}
+    ).then(
+      value => {
+        console.log('onResolved3()',value)
+      },
+      reason => Promise.reject(reason)
+    ).catch(reason => {
+      console.log("onRejected1()",reason)
+    })
   </script>
 </body>
 
