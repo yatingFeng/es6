@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>冒泡排序</title>
+</head>
+<body>
+  <script>
+    const arr = [10,6,26,0,59,1,2]
+    // 外层循环，控制轮数，从0开始计数
+    for(var i = 0; i < arr.length -1; i++){
+      // 内层循环控制次数，得出规律：j<arr.length-1-i
+      for(var j = 0; j < arr.length-1-i; j++){
+        // 判断前一个数是否比后面的数大，大的话就交换
+        if(arr[j] > arr[j+1]){
+          //参考第五个文件中的解构赋值，用数组交换两个数据的方法
+          [arr[j],arr[j+1]] = [arr[j+1],arr[j]]
+        }
+      }
+    }
+    console.log(arr)
+  </script>
+</body>
+</html>
