@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>es6中的class语法</title>
+</head>
+
+<body>
+  <script>
+    //构造函数
+    // function Person(){
+    //   this.name = "粑粑"
+    //   this.age = 45
+    //   this.say = function (){
+    //     console.log("Person粑粑的say")
+    //   }
+    // }
+    // let p1 = new Person
+    // console.log(p1.name)  //粑粑
+    // p1.say() //Person粑粑的say
+
+    // class新es6语法，就是构造函数的另一种写法（语法糖）
+    class Father{
+      constructor(){
+        this.name = "father"
+        this.age = 60
+      }
+      say(){
+        console.log("father class的say")
+      }
+    }
+    let f1 = new Father()
+    // console.log(f1.age)   //60
+    // f1.say()    //father class的say
+ 
+
+    // 继承的复杂写法
+    // class Son extends Father{
+    //   constructor(){
+    //     // 如果是在constructor中，在this之前一定要写super()
+    //     super() //调用父亲的constructor,因为子类没有自己的this对象，而是继承了父类的this对象
+    //     this.name = "son"
+    //     this.score = 100
+    //   }
+    //   hello(){
+    //     console.log("hello")
+    //   }
+    // }
+    // 继承的简便写法
+    class Son extends Father{
+      // 没有constructor、没有super、没有this
+      name = "son"
+      score = 100
+      hello(){
+        console.log("hello")
+      }
+    }
+    let s1 = new Son()
+    console.log(s1.name)  //son
+    console.log(s1.age)   //60 子类中没有的属性去父类中查找
+    console.log(s1.score) //1000  
+    s1.say()     //father class的say  子类中没有的方法去父类中查找
+    s1.hello()  //hello
+ 
+  </script>
+</body>
+
+</html>

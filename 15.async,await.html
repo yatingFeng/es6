@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src="./js/jquery.js"></script>
+
+</head>
+<body>
+  <button id="btn">点击发送ajax</button>
+  <script>
+      // 1  同步 :代码从上往下执行 遇见 同步 就会一直等 等到完成 才会继续走
+      //    异步 :代码从上往下执行 遇见异步 就先走了  异步的代码后面执行
+      // 2  说ajax 问个题  
+      // 哪些是异步  1 定时器 2 ajax 3 事件处理(绑定的onclick等) 4 nodejs 读取文件也有异步
+     
+      console.log(1)
+      $.ajax({
+        url:"./php/ok.php",
+        success:function(res){
+          // console.log('ajax结果',res)
+          console.log(2)
+        }
+      })
+      console.log(3)
+      // 先打印1，遇到ajax先跳过，在打印3，再执行ajax打印2
+
+          // 要求 第一个ajax 成功之后 在 第二个发送ajax  再来第三个....
+          // 这样写 不一定谁先谁后
+          // 如果一直嵌套就是 地狱回调
+          $.ajax({
+            url:"./php/ok.php",
+            success:function(res){
+              console.log('ajax结果111',res)
+                  $.ajax({
+                    url:"./php/ok.php",
+                    success:function(res){
+                      console.log('ajax结果2222',res)
+                      $.ajax({
+                        url:"./php/ok.php",
+                        success:function(res){
+                          console.log('ajax结果333',res)
+                          $.ajax({
+                              url:"./php/ok.php",
+                              success:function(res){
+                                console.log('ajax结果4444',res)
+                              }
+                            })
+                        }
+                      })
+                    }
+                  })
+            }
+          })
+
+          // 可以使用promise 解决地狱回调
+          let p1 = new Promise(function(resolve,reject) {
+              // resolve 是成功的函数
+              // reject  是失败的函数
+          })
+          // p1 是new的 promise 实例  他有固定写法
+          // p1.then(成功的函数resolve,失败的函数reject)
+          p1.then(function(){},function(){})
+
+          let p1 = new Promise(function(resolve,reject) {
+              //   let resolve=function(data){
+              //     console.log('成功',data)
+              // }
+              // resolve 是成功的函数 // reject  是失败的函数
+              resolve(1)//这一步就是调用p1.then中的成功的函数
+          })
+
+          p1.then(function(data){
+              console.log('成功',data)
+          })
+          
+          // 一个ajax + promise 
+          let p1 = new Promise(function(resolve,reject) {
+              $.ajax({
+                  url:"./php/ok.php",
+                  success:function(res){
+                    // console.log('ajax结果',res)
+                    // console.log(2)
+                    // 成功 调用resolve
+                    resolve(res)
+                  }
+              })
+          })
+          p1.then(function(res){
+            console.log(res)//拿到ajax返回的结果
+          })
+
+          // 两个ajax + promise 链式编程没有那么多嵌套关系
+          let p1 = new Promise(function(resolve,reject) {
+              $.ajax({
+                  url:"./php/ok.php",
+                  success:function(res){
+                    // console.log('ajax结果',res)
+                    // console.log(2)
+                    // 成功 调用resolve
+                    resolve(res)
+                  }
+              })
+          })
+          p1.then(function(res){
+            console.log("p1成功的结果",res)//拿到ajax返回的结果
+            // 第二个ajax请求
+            let p2 = new Promise(function(resolve,reject) {
+              $.ajax({
+                  url:"./php/ok.php",
+                  success:function(res){
+                    // console.log('ajax结果',res)
+                    // console.log(2)
+                    // 成功 调用resolve
+                    resolve(res)
+                  }
+              })
+          })
+            return p2
+          })
+          .then(function(res){
+            console.log("p2成功的结果",res)
+          })
+
+          // Promise.all(数组,第二个参数函数)
+
+          // Primose.all([p1,p2,p3...],function)
+          // Primose.all 必须数组里面的所有的 promise执行完毕 才成功 
+          // 用在 要同时 有很多 结果一起成功的 情况
+
+          // Primose.race([p1,p2,p3...],function)
+          // Primose.race  只要 数组里面的 任何一个 成功 整个race就 执行了
+ 
+          // 3 ajax +promise  解决地狱回调 顺便简单封装axios  
+          function axios(){
+              let p1=new Promise(function(resolve,reject) {
+                  $.ajax({
+                      url:"./php/ok.php",
+                      success:function(res){
+                        // console.log('ajax结果',res)
+                        // console.log(2)
+                        // 成功 调用resolve
+                        resolve(res)
+                      }
+                  })
+              })
+              return p1
+              // axios返回一个 promise
+          }
+
+          // axios() 调用axios函数 得到 p1  new的promise
+          // axios 就是 把 发送ajax 用promise封装了一下
+          axios().then(function(res){
+            console.log('结果',res)
+          })
+
+          // 点击 发送ajax
+          // async  await 最简单的使用 就是 可以省略掉then 简单快捷
+          // 这是一个用同步的思维来解决异步问题的方案，当前端接口调用需要等到接口返回值以后渲染页面时。
+          //  async的用法，它作为一个关键字放到函数前面，用于表示函数是一个异步函数，因为async就是异步的意思， 
+          // 异步函数也就意味着该函数的执行不会阻塞后面代码的执行，async 函数返回的是一个promise 对象。
+          // 4 async  await  async/await使得异步代码看起来像同步代码，这正是它的魔力所在
+          document.getElementById("btn").onclick= async ()=>{
+            // 使用axios
+            // axios().then(function(res){
+            //   console.log('结果',res)
+            // })
+            // async,await其实就是和then一样，只不过改写了链式写法
+            // 且then为异步改为await同步
+            // await的含义为等待。意思就是代码需要等待await后面的函数运行完并且有了返回结果之后，才继续执行下面的代码。这正是同步的效果
+            let res=await axios();
+            let res=await axios();//generator的两个暂停状态，执行完上面的在执行这句话
+            console.log('结果',res)
+          }
+    
+      // 5 async +await 原理  generate+yield 
+      // async 函数是什么？一句话，它就是 Generator 函数的语法糖。
+      // Generator 函数是 ES6 提供的一种异步编程解决方案，语法行为与传统函数完全不同。
+      // Generator 函数有多种理解角度。语法上，首先可以把它理解成，Generator 函数是一个状态机，封装了多个内部状态。
+      // 执行 Generator 函数会返回一个遍历器对象，也就是说，Generator 函数除了状态机，还是一个遍历器对象生成函数。返回的遍历器对象，可以依次遍历 Generator 函数内部的每一个状态。
+      // 形式上，Generator 函数是一个普通函数，
+      // 但是有两个特征。一是，function关键字与函数名之间有一个星号；二是，函数体内部使用yield表达式，定义不同的内部状态（yield在英语里的意思就是“产出”）。
+     
+
+      // 重点 就一点 async +await 原理 是 generate + yield  的语法糖 
+      //  async +await 其实就是 generate + yield  的 写法
+      // 为什么要有 async +await 因为方便 看起来代码清晰
+
+      // Generator方式的函数 里面的代码是 分段执行 看到yield 就给你分一段
+      function* helloWorldGenerator() {
+        yield 'hello'; // yield 类似 暂停标记
+        yield 'world';
+        return 'ending';
+      }
+
+      var hw = helloWorldGenerator();//hw 返回一个指针
+      // console.log(hw);//这个函数的结果 是 ending吗？不是，是一个helloWorldGenerator对象 因为代码是暂停的 是一个暂停标记 指向hello
+      console.log(hw.next()) ;//hello  next 表示 拿出这个暂停的值
+      console.log(hw.next())  //world
+      console.log(hw.next())  //ending
+      console.log(hw.next())  //undefined
+
+
+      // 上面代码定义了一个 Generator 函数helloWorldGenerator，它内部有两个yield表达式（hello和world），即该函数有三个状态：hello，world 和 return 语句（结束执行）。
+
+      // 然后，Generator 函数的调用方法与普通函数一样，也是在函数名后面加上一对圆括号。不同的是，调用 Generator 函数后，
+      // 该函数并不执行，返回的也不是函数运行结果，而是一个指向内部状态的指针对象，也就是遍历器对象（Iterator Object）。
+
+      // 下一步，必须调用遍历器对象的next方法，使得指针移向下一个状态。
+      // 也就是说，每次调用next方法，内部指针就从函数头部或上一次停下来的地方开始执行，
+      // 直到遇到下一个yield表达式（或return语句）为止。
+      // 换言之，Generator 函数是分段执行的，yield表达式是暂停执行的标记，而next方法可以恢复执行。
+      // 由于 Generator 函数返回的遍历器对象，只有调用next方法才会遍历下一个内部状态，所以其实提供了一种可以暂停执行的函数。yield表达式就是暂停标志。
+
+      // Iterator遍历器对象的next方法的运行逻辑如下
+      // Generator 函数可以返回一系列的值，因为可以有任意多个yield。
+      // 从另一个角度看，也可以说 Generator 生成了一系列的值，这也就是它的名称的来历（英语中，generator 这个词是“生成器”的意思）。
+      
+      // console.log(hw.next())
+      // // { value: 'hello', done: false }
+
+      // hw.next()
+      // // { value: 'world', done: false }
+
+      // hw.next()
+      // // { value: 'ending', done: true }
+
+      // hw.next()
+      // // { value: undefined, done: true }
+      /* 
+      const fs = require('fs');
+
+      const readFile = function (fileName) {
+        return new Promise(function (resolve, reject) {
+          fs.readFile(fileName, function(error, data) {
+            if (error) return reject(error);
+            resolve(data);
+          });
+        });
+      };
+
+      const gen = function* () {
+        const f1 = yield readFile('/etc/fstab');
+        const f2 = yield readFile('/etc/shells');
+        console.log(f1.toString());
+        console.log(f2.toString());
+      };
+      改造
+
+      const asyncReadFile = async function () {
+      const f1 = await readFile('/etc/fstab');
+      const f2 = await readFile('/etc/shells');
+      console.log(f1.toString());
+      console.log(f2.toString());
+    };
+      
+      
+      */
+
+  </script>
+</body>
+</html>
