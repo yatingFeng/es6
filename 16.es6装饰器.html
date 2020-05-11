@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /*
+    装饰器  就是相当于 给 人 或者事  多加一些东西  就是 现实中装饰类似的意思 化妆打扮加衣服
+  **装饰器（Decorator）是一种与类（class）相关的语法，用来注释或修改类和类方法与属性。
+  许多面向对象的语言都有这项功能**。**一般和类class相关  普通函数不要使用**
+
+  **进入代码就会执行完成** 
+  装饰器是一种函数，写成`@ + 函数名`。它可以放在类和类方法的定义前面。
+    */
+
+    //  装饰器是一个函数,它可以给类或者属性方法加上一些其他的东西
+    // 1.实现了代码的复用
+    function testable(target) {
+      target.isOk = true //相当于给MyTestableClass.isOk = true
+      console.log('我是testable函数', target)
+    }
+    //  类
+    @testable //在类或者类属性方法前面写上 @函数名，就相当于要调用这个函数
+    class MyTestableClass {
+
+    }
+    //类似： testable(MyTestableClass)
+    //  类
+    @testable //在类或者类属性方法前面写上 @函数名，就相当于要调用这个函数
+    class MyTestableClass2 {
+
+    }
+
+    // //stabley
+    function testable(isTestable) {
+      return function (target, ...rest) {
+        console.log('参数', rest)
+        target.isTestable = isTestable;
+      }
+    }
+
+    @testable(true);// 先 testable(true) 返回函数 再 @函数
+    class MyTestableClass { }
+    console.log('add-MyTestableClass', MyTestableClass.isTestable) // true
+
+    @testable(false)
+    class MyClass { }
+    MyClass.isTestable // false
+    console.log('add-MyClass', MyClass.isTestable) // true
+
+    // 3.修饰器
+      // 第一个参数是类的原型对象，是Person.prototype，修饰器的本意是要“修饰”类的实例，但是这
+      // 个时候实例还没生成，	所以只能去修饰原型（这不同于类的修饰，那种情况时target参数指的是类本身）；
+      // 第二个参数是所要修饰的属性名，
+      // 第三个参数是该属性的描述对象。
+    function readonly(target, name, descriptor) {
+      console.log('target', target)  //当前的person
+      console.log('name', name)  //你装饰的那个属性或方法名
+      console.log('descriptor', descriptor)
+      // descriptor对象原来的值如下
+      // {
+      //   configurable:false,//能否使用delete、能否需改属性特性、或能否修改访问器属性、，
+      // 								false为不可重新定义，默认值为true
+      //   enumerable:false,//对象属性是否可通过for-in循环，flase为不可循环，默认值为true
+      //   writable:false,//对象属性是否可修改,flase为不可修改，默认值为true
+      //   value:'xiaoming' //对象属性的默认值
+      // };
+      descriptor.writable = false;
+      return descriptor;
+    }
+
+    class Person {
+      // 可以在类之前用 @函数名 装饰器，也可以在类的属性和方法之前
+      @readonly
+      abc() {
+        console.log('我是person的abc函数')
+      }
+      // 给xx属性先用readonly这个装饰器函数执行一下，（因为装器其中writable = false不可修改）
+      //装饰器函数就是执行函数，帮助下面的方法或属性加一些控制条件
+      @readonly
+      xx = 123  
+    }
+
+    let p = new Person()
+    console.log('pp',p.xx)  //pp 123
+    p.xx = 456  //(不能改，readonly装饰器设置的不可修改)
+
+    class Person {
+      // 可以在类之前用 @函数名 装饰器，也可以在类的属性和方法之前
+      @readonly
+      name() {
+        return `${this.first} ${this.last}`
+      }
+    }
+
+    let p = new Person()
+    console.log(p)
+  </script>
+</body>
+
+</html>

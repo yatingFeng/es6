@@ -127,11 +127,11 @@
           // Promise.all(数组,第二个参数函数)
 
           // Primose.all([p1,p2,p3...],function)
-          // Primose.all 必须数组里面的所有的 promise执行完毕 才成功 
+          // Primose.all 必须数组里面的所有的 promise执行成功 才成功 
           // 用在 要同时 有很多 结果一起成功的 情况
 
-          // Primose.race([p1,p2,p3...],function)
-          // Primose.race  只要 数组里面的 任何一个 成功 整个race就 执行了
+          // Primose.race([p1,p2,p3...],function) 
+          // Primose.race  只要 数组里面的 任何一个 成功 整个race就 成功了
  
           // 3 ajax +promise  解决地狱回调 顺便简单封装axios  
           function axios(){

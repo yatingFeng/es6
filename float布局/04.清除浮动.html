@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .container{
+      width:500px;
+      /* 清除浮动方法一：父元素设置高度 */
+      /* height: 220px; */
+      background: #ccc;
+    }
+    .item1,.item2{
+      width: 100px;
+      height: 200px;
+      margin-left: 10px;
+      float: left;
+    }
+    .item1{
+      background-color: plum;
+    }
+    .item2{
+      background-color: orange;
+    }
+    .item3{
+      width: 240px;
+      height: 200px;
+      background-color:lightsteelblue;
+      float: left;
+      margin-left: 10px;
+    }
+    .item3-box{
+      width:100px;
+      height: 80px;
+      background-color: mediumpurple;
+      float: left;
+    }
+    .item3-box1,.item3-box3{
+      margin-right: 10px;
+    }
+    .item3-box3,.item3-box4{
+      margin-top: 10px;
+    }
+    /* 清除浮动的终极版 */
+    .container::after{
+      content: '';
+      clear: both;
+      display: block;
+      height: 0;
+      visibility: hidden;
+    }
+    /* 兼容性问题，IE6不支持伪元素after */
+    .container{
+      zoom:1
+    }
+  </style>
+</head>
+<body>
+  <!-- 清除浮动方法四：给父元素设置overfloe:hidden/auto -->
+  <!-- <div class="container" style="overflow:hidden/hidden"> -->
+  <!-- 清除浮动方法五：给父元素设置display:inline-block-->
+  <!-- <div class="container" style="display:inline-block"> -->
+  <!-- 清除浮动方法六：给父元素设置display:table-->
+  <!-- <div class="container" style="display:table"> -->
+  <div class="container">
+    <div class="item1"></div>
+    <div class="item2"></div>
+    <div class="item3">
+      <div class="item3-box item3-box1"></div>
+      <div class="item3-box"></div>
+      <div class="item3-box item3-box3"></div>
+      <div class="item3-box item3-box4"></div>
+      <!-- 清除浮动方法三：添加额外标签，在要清除浮动元素最后添加一个空白标签 -->
+      <!-- <div style="clear:both"></div> -->
+    </div>
+    <!-- 清除浮动方法二:在父元素内部的最后使用br标签和其自身的html属性 -->
+    <!-- <br clear="all"> -->
+  </div>
+</body>
+</html>
