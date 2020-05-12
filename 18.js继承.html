@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    //es5的继承
+    // 1.原型链继承 缺点：创建实例时不能传递参数，所有属性都被实例共享
+    // function Parent() {
+    //   this.name = 'kevin';
+    // }
+    // Parent.prototype.getName = function () {
+    //   console.log(this.name);
+    // }
+    // function Child() { }
+    // Child.prototype = new Parent();
+    // var child = new Child();
+    // child.getName() //kevin
+
+    // 2.借用构造函数
+    // 优点：可以传递参数，避免了引用类型共享
+    // 缺点：方法都在构造函数中定义，每次创建实例都会创建一遍方法。 
+    // function Parent() {
+    //   this.name = ['kevin'];
+    // }
+    // function Child() {
+    //   Parent.call(this);
+    // }
+    // Child.prototype = new Parent();
+    // var child1 = new Child();
+    // var child2 = new Child();
+    // child1.name.push("cc");
+    // console.log(child1.name); //["kevin", "cc"]
+    // console.log(child2.name); //["kevin"]
+
+    // 3.组合继承
+    //优点：融合了原型继承和构造函数继承，是JavaScript中常用的设计模式。
+    //缺点：调用两次父构造函数
+    // function Parent() {
+    //   this.name = ['kevin'];
+    // }
+    // Parent.prototype.getName = function () {
+    //   console.log(this.name, this.age);
+    // }
+    // function Child(age) {
+    //   Parent.call(this);
+    //   this.age = age;
+    // }
+    // Child.prototype = new Parent();
+    // var child1 = new Child(19);
+    // var child2 = new Child(20);
+    // child1.name.push("cc");
+    // child1.getName(); //["kevin", "cc"] 19
+    // child2.getName(); //["kevin"] 20
+
+    //4.原型式继承
+    //这是es5中的，Object.create的模拟实现。
+    //缺点：和原型式继承一样。
+    // function createObj(o) {
+    //   function F() { }
+    //   F.prototype = o;
+    //   return new F();
+    // }
+
+    // // 5.寄生式继承
+    // function createObj(o) {
+    //   var clone = Object.create(o);
+    //   clone.say = () => { console.log(this) };
+    //   return clone
+    // }
+    // console.log(createObj({})); //{say: ƒ}
+
+    //6.寄生组合式继承
+    //优点：开发人员普遍认为寄生组合式继承是最理想的继承范式。
+    // function Parent(name) {
+    //   this.name = name;
+    // }
+    // Parent.prototype.getName = function () {
+    //   console.log(this.name, this.age);
+    // }
+    // function Child(name, age) {
+    //   Parent.call(this, name);
+    //   this.age = age;
+    // }
+    // var F = function () { }
+    // F.prototype = Parent.prototype;
+    // Child.prototype = new F();
+    // var child1 = new Child("cc", 20)
+    // console.log(child1) //Child {name: "cc", age: 20}
+
+
+    // es5之后的继承  （class本质还是函数，只是一个语法糖而已。）
+    // 1.class通过extends关键字实现继承。
+    // class Parent {
+    //   constructor(x, y) {
+    //     this.x = x;
+    //     this.y = y
+    //   }
+    // }
+    // class Child extends Parent {
+    //   constructor(x, y, name) {
+    //     super(x, y);//调用父类的constructor(x,y)
+    //     this.name = name;
+    //   }
+    // }
+    // var child1 = new Child("x", "y", "ccg");
+    // console.log(child1);  //Child {x: "x", y: "y", name: "ccg"}
+
+    // 2.super关键字
+    /*
+    如果在子类构造函数中使用this，就要采用super关键字，它表示调用父类的构造函数。这是必须的。
+    因为ES6的继承机制和ES5的不同，ES5是先创造子类的实例对象this，再将父类的方法添加
+    到this上面（Parent.apply(this)），而ES6是先创建父类的实例对象this，所以必须调用super关键字。
+    虽然super代表A的构造函数，但是返回的是子类B的实例，即super中的this指向的B。
+    */
+    // class A {
+    //   constructor() {
+    //     console.log(new.target.name);
+    //   }
+    // }
+    // class B extends A {
+    //   constructor() {
+    //     super();
+    //   }
+    // }
+    // new A();
+    // new B();
+    /*
+    作为函数，super只能在子类的构造函数中。但是如果作为对象时，在普通方法中指向父类的原型对象；
+    在静态方法中指向父类。（！由于super指向父类的原型对象，
+    所以定义在父类实例的方法无法通过super调用）。
+    */
+    class Parent {
+      static myMethod(msg) {
+        console.log('static', msg);
+      }
+      myMethod(msg) {
+        console.log('instance', msg);
+      }
+    }
+    class Child extends Parent {
+      static myMethod(msg) {
+        super.myMethod(msg);
+      }
+      myMethod(msg) {
+        super.myMethod(msg);
+      }
+    }
+    Child.myMethod(1);  //static 1
+    var child = new Child();  
+    child.myMethod(2);  //instance 2
+    //使用super，要显式指定使用方法。
+    // class Parent {
+    //   constructor() {
+    //     super();
+    //     console.log(super);//报错
+    //   }
+    // }
+  </script>
+</body>
+
+</html>

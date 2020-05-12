@@ -1,12 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
 </head>
+
 <body>
+  <script>
+    // 凡是 异步代码和定时代码 都会等待 主程序执行完毕 再开始
+    // 哪些是异步操作 1 定时器延时器 2 ajax 3 绑定的onclick事件函数.. 4 
+
+    // 1.先执行主线程的（正常代码。包括promise,但不包括promise.then）
+    //2. 再看微任务队列，执行微任务，加入某个微任务中有宏任务，则将宏任务放入队列
+    // 3.微任务队列中的微任务执行完毕，再执行宏任务队列中的宏任务
+    // 4.加入某个宏任务中包含有微任务，不再将微任务放入队列，将这个宏任务中的微任务执行完才执行下一个宏任务
+
+    // console.log(1)
+    // setTimeout(function () {
+    //   console.log(2);
+    // },0)
+    // console.log(3)  //1 3 2
+    // 注意 new promise 会立刻执行  而 .then 是需要异步的
+
+    // console.log(1)
+    // new Promise(function(resolve,reject){
+    //     console.log('2')
+    //     resolve()
+    // }).then(function(){
+    //   console.log(3)
+    // })
+    // console.log(4)  //1 2 4 3
+
+  //  宏任务 ： 定时器延时器   微任务：promise
+  // 先同步 再取出第一个宏任务执行 所有的相关微任务总会在下一个宏任务之前全部执行完毕   
+  // 如果遇见 就  先微后宏
+    // console.log(1)
+    // setTimeout(function () {
+    //   console.log(2);
+    // },0)
+    // new Promise(function (resolve) {
+    //   console.log('3');
+    //   resolve();
+    // }).then(function () {
+    //   console.log('4')
+    // })  // 1 3 4 2 
+
+    // console.log('1');
+    // // 延时器 放到事件队列里面   宏任务
+    // setTimeout(function () {
+    //   console.log('2');
+    //   new Promise(function (resolve) {
+    //     console.log('3');
+    //     resolve();
+    //   }).then(function () {
+    //     console.log('4')
+    //   })
+    // },0)
+    // // promise new promise立刻执行 但是 then 会放到事件队列 微任务
+    // new Promise(function (resolve) {
+    //   console.log('5');
+    //   resolve();
+    // }).then(function () {
+    //   console.log('6')
+    // })
+    // // // 延时器 放到事件队列里面   宏任务
+    // setTimeout(function () {
+    //   console.log('7');
+    //   new Promise(function (resolve) {
+    //     console.log('8');
+    //     resolve();
+    //   }).then(function () {
+    //     console.log('9')
+    //   })
+    //   console.log('10')
+    // },0)
+   
+    // console.log('11')
+    // 1  5 11 6 2 3  4 7 8  10 9
+    //1 此时事件队列代码 有一个 then 6 两个 延时器setTimeout
+    //2 先微后宏 执行 then 6 
+    //3 剩下 两个 延时器setTimeout  先上面 再下面
+    //4 上面的setTimeout  2 3 虽然里面有 then 4 但是记住一个宏任务里面必须会执行完微任务
+    //5 下面的setTimeout
+
+    // 1 5 11 6 2 3 4 7 8 10 9
+    // 第一个setTimeout宏任务结束之后，会去检查队列中是否有微任务存在，如果有的话先执行微任务。（微任务优先级高）
   
+
+    // setTimeout(function () {
+    //   console.log('7');
+    //   new Promise(function (resolve) {
+    //     console.log('8');
+    //     resolve();
+    //   }).then(function () {
+    //     console.log('9')
+    //   })
+    //   console.log('10')
+    // },0)  //7 8 10 9
+
+    new Promise((resolve) => {
+      console.log("1")
+      resolve()
+    }).then(() => {
+      console.log("2")
+      setTimeout(() => {
+        console.log("3")
+      },0)
+    })
+    setTimeout(() => {
+      console.log("4")
+    },1000)
+    console.log("5")  //1 5 2 3 4 
+  </script>
 </body>
+
 </html>
