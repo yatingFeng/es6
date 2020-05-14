@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    //博客：https://www.cnblogs.com/yaya-003/p/12887535.html
+    function Foo() {
+      getName = function () { alert(1); };
+      return this;
+    }
+    Foo.getName = function () { alert(2); };
+    Foo.prototype.getName = function () { alert(3); };
+    var getName = function () { alert(4); };
+    function getName() { alert(5); }
+
+    /*
+    解题过程：js执行的时候有一个变量（var）和函数（function）提升的过程（预解析）
+    所以，以上代码解析为
+      function Foo() {
+      getName = function () { alert(1); };
+      return this;
+    }
+    //  var getName（当变量与函数重名，优先保留函数定义）
+    // function getName() { alert(5); }（被重新赋值了）
+    ***************
+    // 开始执行下面的代码，遇到getName = function () { alert(4); };将上面的函数重赋值
+    Foo.getName = function () { alert(2); };
+    Foo.prototype.getName = function () { alert(3); };
+    // getName = function () { alert(4); };
+  
+    */
+    Foo.getName(); //2 找Foo函数找到getName方法    Foo.getName = function () { alert(2); };
+    getName(); // 4 找到getName = function () { alert(4); };
+    Foo().getName(); //1 运算符优先级（.的运算符优先级高） 先执行Foo函数再去执行.getName方法
+    //  等价于    (Foo()).getName(); 此时全局中的getName被重新赋值因为执行Foo函数时有一个全局变量getName
+    getName = function () { alert(1); };
+    // Foo调用时返回this,因为是window调用的函数，(window.Foo()).getName(),this指向window
+    // 所有foo函数执行的结果为window,  Foo().getName()等价于window.getName 1;
+    getName(); // 1
+    new Foo.getName() //2 点.的优先级最高 new (Foo.getName)() 
+    // 等价于 new (function () { alert(2); })() ，new函数调用时，会执行这个函数，会输出2
+   new Foo().getName() //3 尽管.的优先级高，但()并不能.调用，所以会将new Foo()的值求出来再去.getName
+  //  (new Foo()).getName()-->new关键字最后会生成一个实例对象foo.getName()
+  // 实例对象如何去找到对应的属性？（沿着隐式原型链__proto__，先去自身,再去__proto__，直到Object,直到返回undefined）
+  //找到  Foo.prototype.getName = function () { alert(3); };
+  new new Foo().getName() //new ((new Foo()).getName)() => new (foo.getName)()
+  // new (function () { alert(3); };)() ,直接执行new的函数，打印3
+   
+   
+    new (Foo.getName)(); // 2
+    (new Foo()).getName(); // 3  
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    /*
+    给定一个数组，元素包含：一堆负数 + 一堆 0 + 一堆正数，求最后一个出现的负数和
+    第一个出现的正数的位置，从 1 开始计数。
+    */  
+   function getIndex(){
+     const nums = [-1,-2,-9,1,0,8,2,-3]
+     const map = new Map()
+     for(let i = 0;i<nums.length;i++){
+      if(nums[i]>0){
+        //将正数存
+        map.set(1,[...map.get(1)||[],nums[i]])
+      }else if(nums[i]<0){
+        // 将负数存
+        map.set(-1,[...map.get(-1)||[],nums[i]])
+      }else if(nums[i] === 0){
+        // 将0存
+        map.set(0,[...map.get(0)||[],nums[i]])
+      }
+     }
+     console.log(map.get(-1)[map.get(-1).length-1])
+     console.log(map.get(1)[0])
+   }
+   getIndex()
+
+  </script>
+</body>
+</html>
