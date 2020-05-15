@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <ul id="test">
+    <li>这是第一条</li>
+    <li>这是第二条</li>
+    <li>这是第三条</li>
+  </ul>
+  <script>
+    // 方法一：闭包，遍历时将索引存起来，传入触发点击函数中
+    const liList = document.getElementById("test").children
+    for(let i=0;i<liList.length;i++){
+      liList[i].onclick = (function(num){
+        return function(){
+          alert(num)
+        }
+      }(i))
+    }
+
+    // 方法二：给每个li加入一个索引属性
+    // var liList = document.getElementsByTagName('li')
+    // for(var i = 0 ;i<liList.length;i++){
+    //   liList[i].setAttribute("index",i)
+    //   liList[i].onclick = function(){
+    //     alert(this.getAttribute("index"))
+    //   }
+    // }
+
+    // 方法三 借用e
+    // var liList = document.getElementsByTagName('li')
+    // for(var i = 0;i<liList.length;i++){
+    //   liList[i].index = i
+    //   liList[i].onclick = function(e){
+    //     // console.log(e)
+    //     alert(e.target.index)
+    //   }
+    // }
+  </script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    function clone(obj) {
+      var o;
+      switch (typeof obj) {
+        case 'string':
+          o = obj + '';  //将o转换成字符串
+          break;
+        case 'number':
+          o = obj * 1; //将o转换成整数
+          break;
+        case 'undefined':
+          break;
+        case 'boolean':
+          o = obj;
+          break;
+        case 'object':
+          if (obj === null) {
+            o = null
+          } else {
+            /*
+              这里补充一个知识点：
+              当是数组时Object.peototype.toString.call([]) 打印"[object Array]"
+              当是对象时Object.peototype.toString.call({}) 打印"[object Object]"
+              slice(8,-1)是截取某字符串从第8位开始，到最后1为结束 ：为Arrray或者Object（上面的案例）
+            */
+            if (Object.prototype.toString.call(obj).slice(8, -1) === 'Array') {
+              o = []
+              for (var i = 0; i < obj.length; i++) {
+                o.push(clone(obj[i]))
+              }
+            } else {
+              o = {}
+              for (var key in obj) {
+                o[key] = clone(obj[key])
+              }
+            }
+          }
+          break
+        default:
+          break
+      }
+      return o
+    }
+    console.log(clone('abcd'))  //abcd
+    console.log(clone(123)) //123
+    console.log(clone(false)) //false   
+    console.log(clone([1, 5, 9, 78, 0, -1, 5])) //[1, 5, 9, 78, 0, -1, 5]
+    console.log(clone({ name: '冯亚婷', age: 18, height: 168 })) //{name: "冯亚婷", age: 18, height: 168}
+   
+  </script>
+</body>
+
+</html>
